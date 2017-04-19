@@ -1,0 +1,40 @@
+---
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: bootstrap
+    flavor: TID-01CPU-02GB-20GB
+    security_groups: SSH,DCOS
+    ansible_host_groups: bootstrap
+    image: TID-RH7-2NIC.20160503
+    deployment_group: bootstrap
+    count: 1
+
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: master
+    flavor: TID-01CPU-02GB-20GB
+    security_groups: SSH,DCOS
+    ansible_host_groups: masternode
+    image: TID-RH7-2NIC.20160503
+    deployment_group: node
+    count: 3
+
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: privatenode
+    flavor: TID-02CPU-04GB-20GB
+    security_groups: SSH,DCOS
+    ansible_host_groups: privatenode
+    image: TID-RH7-2NIC.20160503
+    deployment_group: node
+    count: 4
+
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: publicnode
+    flavor: TID-04CPU-08GB-20GB
+    security_groups: SSH,DCOS
+    ansible_host_groups: publicnode
+    image: TID-RH7-2NIC.20160503
+    deployment_group: node
+    count: 2

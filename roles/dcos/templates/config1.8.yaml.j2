@@ -1,0 +1,27 @@
+---
+agent_list:
+{% for node in groups['privatenode'] %}
+- {{ hostvars[node].openstack.addresses.management[0].addr }}
+{% endfor %}
+bootstrap_url: {{ bootstrap_url }}
+cluster_name: '{{ cluster_name }}'
+exhibitor_storage_backend: {{ exhibitor_storage_backend }}
+# ip_detect_path: {{ ip_detect_path }}
+master_discovery: {{ master_discovery }}
+master_list:
+{% for node in groups['masternode'] %}
+- {{ hostvars[node].openstack.addresses.management[0].addr }}
+{% endfor %}
+process_timeout: 10000
+public_agent_list:
+{% for node in groups['publicnode'] %}
+- {{ hostvars[node].openstack.addresses.management[0].addr }}
+{% endfor %}
+resolvers:
+{% for entry in resolvers %}
+- {{ entry }}
+{% endfor %}
+# ssh_key_path: {{ ssh_key_path }} 
+ssh_port: 22
+ssh_user: {{ remote_user }}
+telemetry_enabled: {{ telemetry }}

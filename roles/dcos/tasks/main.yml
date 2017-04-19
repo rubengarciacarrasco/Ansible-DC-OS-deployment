@@ -1,0 +1,24 @@
+---
+- name: Preflight installation
+  include: prereqs.yml
+  tags: dcos_prereqs
+
+- name: Bootstrap installation
+  include: bootstrap.yml
+  when: inventory_hostname in groups['bootstrap']
+  tags: Install_bootstrap
+
+- name: Install Master Nodes
+  include: masternode.yml
+  when: inventory_hostname in groups['masternode']
+  tags: install_masternodes
+
+- name: Install Private Nodes
+  include: privatenode.yml
+  when: inventory_hostname in groups['privatenode']
+  tags: install_privatenodes
+
+- name: Install Public Nodes
+  include: publicnode.yml
+  when: inventory_hostname in groups['publicnode']
+  tags: install_publicnodes

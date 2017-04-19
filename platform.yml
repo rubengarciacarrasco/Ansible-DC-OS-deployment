@@ -1,0 +1,19 @@
+---
+- name: Preparing environment
+  hosts: all
+  remote_user: cloud-user
+  become: true
+  tasks:
+  - include: tasks/prepare_instance.yml
+  tags: environment
+
+- name: Deploy DC/OS
+  hosts: all
+  become: true
+  tags: dcos
+  any_errors_fatal: true
+  roles:
+    - role: dcos
+
+
+

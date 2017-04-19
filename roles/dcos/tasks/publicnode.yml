@@ -1,0 +1,15 @@
+---
+- name: Public Nodes | Create DC/OS temp folder
+  file:
+    path: /tmp/dcos
+    state: directory
+    mode: 0755
+
+- name: Public Nodes | Download DC/OS installer to temp folder
+  get_url:
+    url: "http://{{ bootstrap_node }}:{{ bootstrap_port }}/dcos_install.sh"
+    dest:  /tmp/dcos/dcos_install.sh
+    mode: 0755
+
+- name: Public Nodes | Install DC/OS
+  command: "/tmp/dcos/dcos_install.sh slave_public"

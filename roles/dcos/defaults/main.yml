@@ -1,0 +1,14 @@
+---
+cluster_name: DOPG
+genconf_dir: /home/cloud-user
+remote_user: cloud-user
+telemetry: false
+resolvers:
+- 8.8.4.4
+exhibitor_storage_backend: static
+master_discovery: static
+ip_detect_path: genconf/ip-detect
+ssh_key_path: ssh-key
+select_ethernet: eth0
+bootstrap_node: bootstrap-1
+bootstrap_port: 9000

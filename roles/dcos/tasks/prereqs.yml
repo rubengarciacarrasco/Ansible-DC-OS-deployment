@@ -1,0 +1,33 @@
+---
+- name: Add docker repository
+  copy:
+    src: repo/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install necessary Preflight packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce
+    - unzip
+    - ipset
+
+- name: Start docker
+  service:
+    name: docker
+    state: restarted
+
+- name: Install PIP
+  command: easy_install pip
+
+- name: Install docker-py package
+  command: pip install docker-py
+
+- name: Ensure "nogroup" group exists
+  group:
+    name: nogroup 
+    state: present

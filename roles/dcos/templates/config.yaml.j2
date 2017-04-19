@@ -1,0 +1,19 @@
+---
+{% for node in groups['bootstrap']%}
+bootstrap_url: http://{{ hostvars[node].openstack.addresses.management[0].addr }}:{{ bootstrap_port }}
+{% endfor %}
+cluster_name: '{{ cluster_name }}'
+exhibitor_storage_backend: {{ exhibitor_storage_backend }}
+# ip_detect_path: {{ ip_detect_path }}
+master_discovery: {{ master_discovery }}
+master_list:
+{% for node in groups['masternode'] %}
+- {{ hostvars[node].openstack.addresses.management[0].addr }}
+{% endfor %}
+resolvers:
+{% for node in groups['masternode'] %}
+- {{ hostvars[node].openstack.addresses.management[0].addr }}
+{% endfor %}
+{% for entry in resolvers %}
+- {{ entry }}
+{% endfor %}

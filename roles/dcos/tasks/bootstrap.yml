@@ -1,0 +1,50 @@
+---
+- name: Bootstrap | Download DC/OS installer
+  get_url:
+    url: "https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh"
+    dest:  "{{ genconf_dir }}/dcos_generate_config.sh"
+    mode: 0755
+
+- name: Bootstrap | Create genconf directoy
+  file:
+    path: "{{ genconf_dir }}/genconf"
+    state: directory
+    mode: 0755
+
+- name: Bootstrap | Generate bootstrap configuration
+  template:
+    src: config.yaml.j2
+    dest: "{{ genconf_dir }}/genconf/config.yaml"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Bootstrap | Copy detect-ip script to bootstrap installation directory
+  template:
+    src: ip-detect.j2
+    dest: "{{ genconf_dir }}/genconf/ip-detect"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Bootstrap | Copy SSH_KEY to bootstrap installation directory
+  copy:
+    src: genconf/ssh_key
+    dest: "{{ genconf_dir }}/genconf/ssh_key"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Bootstrap | Finish DC/OS configuration
+  shell: "{{ genconf_dir }}/dcos_generate_config.sh"
+
+- name: Bootstrap | Prepare bootstrap nginx
+  docker_container:
+    name: bootstrap
+    image: nginx
+    state: started
+    volumes:
+    - "{{ genconf_dir }}/genconf/serve:/usr/share/nginx/html:ro"
+    published_ports:
+    - "0.0.0.0:{{ bootstrap_port }}:80"
+
